@@ -1,0 +1,181 @@
+---
+title: Pipeline Visualizer
+description: Interactive visualization component for CI/CD pipelines with real-time status updates
+---
+
+# Pipeline Visualizer Component
+
+The Pipeline Visualizer component provides an interactive way to visualize and monitor CI/CD pipelines across different platforms.
+
+## Features
+
+- Real-time pipeline status updates
+- Interactive stage inspection
+- Support for multiple CI/CD platforms
+- Timeline view with detailed logs
+- Stage dependency visualization
+
+## Usage
+
+```tsx
+import { PipelineVisualizer } from "@/components/pipeline-visualizer"
+
+export default function CICDDashboard() {
+  return (
+    <PipelineVisualizer
+      pipeline={{
+        id: "deploy-production",
+        platform: "github-actions",
+        repository: "org/repo",
+        branch: "main",
+        stages: [
+          {
+            name: "build",
+            status: "success",
+            duration: "2m 30s"
+          },
+          {
+            name: "test",
+            status: "running",
+            steps: ["unit", "integration", "e2e"]
+          },
+          {
+            name: "deploy",
+            status: "pending",
+            environment: "production"
+          }
+        ]
+      }}
+      onStageClick={(stage) => {
+        console.log("Inspecting stage:", stage.name);
+      }}
+      refreshInterval={10000}
+    />
+  )
+}
+```
+
+## API Reference
+
+### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `pipeline` | `Pipeline` | Pipeline configuration and status |
+| `refreshInterval` | `number` | Update interval in milliseconds |
+| `onStageClick` | `(stage: Stage) => void` | Stage click handler |
+| `theme` | `"light" \| "dark"` | Visual theme |
+
+### Pipeline Configuration
+
+```typescript
+interface Pipeline {
+  id: string;
+  platform: "github-actions" | "gitlab-ci" | "jenkins" | "azure-devops";
+  repository: string;
+  branch: string;
+  stages: Stage[];
+}
+
+interface Stage {
+  name: string;
+  status: "pending" | "running" | "success" | "failed" | "cancelled";
+  duration?: string;
+  steps?: string[];
+  environment?: string;
+  dependencies?: string[];
+}
+```
+
+## Examples
+
+### GitHub Actions Pipeline
+
+```tsx
+<PipelineVisualizer
+  pipeline={{
+    id: "frontend-deploy",
+    platform: "github-actions",
+    repository: "org/frontend",
+    branch: "main",
+    stages: [
+      {
+        name: "lint",
+        status: "success",
+        duration: "45s"
+      },
+      {
+        name: "build",
+        status: "success",
+        duration: "3m 15s",
+        steps: ["install", "compile", "bundle"]
+      },
+      {
+        name: "test",
+        status: "running",
+        steps: ["unit", "integration"]
+      },
+      {
+        name: "deploy",
+        status: "pending",
+        environment: "staging",
+        dependencies: ["build", "test"]
+      }
+    ]
+  }}
+  theme="dark"
+  onStageClick={(stage) => {
+    // Open detailed view for stage
+    openStageDetails(stage);
+  }}
+/>
+```
+
+### Complex Pipeline with Dependencies
+
+```tsx
+<PipelineVisualizer
+  pipeline={{
+    id: "microservice-deploy",
+    platform: "gitlab-ci",
+    repository: "org/backend",
+    branch: "develop",
+    stages: [
+      {
+        name: "security-scan",
+        status: "success",
+        duration: "1m 30s"
+      },
+      {
+        name: "build-api",
+        status: "success",
+        duration: "4m",
+        dependencies: ["security-scan"]
+      },
+      {
+        name: "build-worker",
+        status: "success",
+        duration: "3m",
+        dependencies: ["security-scan"]
+      },
+      {
+        name: "integration-test",
+        status: "running",
+        dependencies: ["build-api", "build-worker"]
+      },
+      {
+        name: "deploy-staging",
+        status: "pending",
+        environment: "staging",
+        dependencies: ["integration-test"]
+      }
+    ]
+  }}
+  refreshInterval={5000}
+  onStageClick={(stage) => {
+    if (stage.status === "failed") {
+      showErrorLogs(stage);
+    }
+  }}
+/>
+``` 

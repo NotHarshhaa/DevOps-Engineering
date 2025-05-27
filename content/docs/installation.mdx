@@ -1,0 +1,234 @@
+---
+title: DevOps Toolkit Setup
+description: Essential tools and configurations to start your DevOps journey
+icon: Wrench
+---
+
+# Setting Up Your DevOps Environment
+
+This guide will help you set up the essential tools and configurations needed to start experimenting in this DevOps playground.
+
+## Core Tools Installation
+
+<Steps>
+  <Step>
+    ### Install Cloud CLI Tools
+
+    First, let's set up the major cloud provider CLI tools:
+
+    <Tabs items={['AWS CLI', 'Azure CLI', 'Google Cloud SDK']}>
+    ```bash tab="AWS CLI"
+    # For Linux
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+
+    # Verify installation
+    aws --version
+    ```
+    ```bash tab="Azure CLI"
+    # For Linux
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+    # Verify installation
+    az --version
+    ```
+    ```bash tab="Google Cloud SDK"
+    # Add Google Cloud SDK package source
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+    sudo apt-get update && sudo apt-get install google-cloud-cli
+
+    # Verify installation
+    gcloud --version
+    ```
+    </Tabs>
+  </Step>
+
+  <Step>
+    ### Infrastructure as Code Tools
+
+    Install the essential IaC tools:
+
+    <Tabs items={['Terraform', 'Ansible', 'Pulumi']}>
+    ```bash tab="Terraform"
+    # Add HashiCorp GPG key
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+    sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    sudo apt-get update && sudo apt-get install terraform
+
+    # Verify installation
+    terraform --version
+    ```
+    ```bash tab="Ansible"
+    # Install Ansible
+    sudo apt update
+    sudo apt install software-properties-common
+    sudo add-apt-repository --yes --update ppa:ansible/ansible
+    sudo apt install ansible
+
+    # Verify installation
+    ansible --version
+    ```
+    ```bash tab="Pulumi"
+    # Install Pulumi
+    curl -fsSL https://get.pulumi.com | sh
+
+    # Verify installation
+    pulumi version
+    ```
+    </Tabs>
+  </Step>
+
+  <Step>
+    ### Container Tools
+
+    Set up Docker and Kubernetes tools:
+
+    ```bash
+    # Install Docker
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh
+
+    # Install kubectl
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+    # Install Helm
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+    # Install k9s (optional but recommended)
+    curl -sS https://webinstall.dev/k9s | bash
+
+    # Verify installations
+    docker --version
+    kubectl version --client
+    helm version
+    k9s version
+    ```
+  </Step>
+
+  <Step>
+    ### Development Tools
+
+    Install essential development and automation tools:
+
+    ```bash
+    # Install Python and pip
+    sudo apt update
+    sudo apt install python3 python3-pip
+
+    # Install Node.js and npm
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+
+    # Install Git
+    sudo apt install git
+
+    # Verify installations
+    python3 --version
+    pip3 --version
+    node --version
+    npm --version
+    git --version
+    ```
+  </Step>
+
+  <Step>
+    ### Configure Your Environment
+
+    Set up your development environment:
+
+    ```bash
+    # Create workspace directory
+    mkdir -p ~/devops-workspace
+    cd ~/devops-workspace
+
+    # Clone this repository
+    git clone https://github.com/NotHarshhaa/DevOps-Engineering.git
+    cd DevOps-Engineering
+
+    # Create configuration directory
+    mkdir -p ~/.config/devops-playground
+    ```
+
+    Create a basic configuration file:
+
+    ```yaml title="~/.config/devops-playground/config.yaml"
+    workspace:
+      path: ~/devops-workspace
+      default_project: DevOps-Engineering
+
+    cloud:
+      default_provider: aws
+      region: us-west-2
+
+    terraform:
+      backend: local
+      plugin_cache_dir: ~/.terraform.d/plugin-cache
+
+    kubernetes:
+      config: ~/.kube/config
+      default_namespace: devops-playground
+    ```
+  </Step>
+</Steps>
+
+## Additional Tools (Optional)
+
+Here are some additional tools you might find useful:
+
+- **Monitoring & Logging**:
+  - Prometheus: `sudo apt install prometheus`
+  - Grafana: Follow [official installation guide](https://grafana.com/docs/grafana/latest/installation/)
+
+- **Security Tools**:
+  - HashiCorp Vault: `sudo apt install vault`
+  - SOPS: `sudo apt install mozilla-sops`
+
+- **CI/CD Tools**:
+  - Jenkins: Follow [official installation guide](https://www.jenkins.io/doc/book/installing/)
+  - GitLab Runner: Follow [runner installation guide](https://docs.gitlab.com/runner/install/)
+
+## Verification
+
+Run this script to verify your setup:
+
+```bash
+#!/bin/bash
+echo "Checking DevOps tools installation..."
+
+tools=(
+  "aws" "terraform" "docker" "kubectl" "helm"
+  "python3" "git" "node" "ansible"
+)
+
+for tool in "${tools[@]}"; do
+  if command -v $tool &> /dev/null; then
+    echo "✅ $tool is installed"
+    $tool --version
+  else
+    echo "❌ $tool is not installed"
+  fi
+done
+```
+
+<Callout type="info" title="Environment Variables">
+Remember to set up your environment variables and credentials for each tool. Common ones include:
+- `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+- `KUBECONFIG`
+- `TERRAFORM_TOKEN`
+</Callout>
+
+## Next Steps
+
+Now that your environment is set up, you can:
+1. Start exploring the [Infrastructure as Code examples](/docs/infrastructure)
+2. Try out the [CI/CD pipeline templates](/docs/cicd)
+3. Experiment with [Kubernetes deployments](/docs/kubernetes)
+4. Set up [monitoring and observability](/docs/monitoring)
+
+
+
+
+

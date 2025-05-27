@@ -1,0 +1,255 @@
+---
+title: DevOps CLI Tools
+description: Essential command-line tools and automation scripts for DevOps workflows
+icon: Terminal
+---
+
+# DevOps Command-Line Tools
+
+This guide covers the essential CLI tools and custom scripts available in this DevOps playground for automating various tasks and workflows.
+
+<Callout type="info">
+Most of these tools are designed to work with common DevOps platforms and cloud providers. Make sure you have the [required credentials](/docs/installation#environment-variables) configured.
+</Callout>
+
+## Core CLI Tools
+
+### Infrastructure Management
+
+Our infrastructure management tools help you quickly scaffold and manage cloud resources:
+
+<Tabs items={["Terraform", "AWS", "Kubernetes"]}>
+```bash tab="Terraform"
+# Initialize a new Terraform workspace
+devops-cli terraform init-workspace \
+  --name my-project \
+  --cloud aws \
+  --region us-west-2
+
+# Apply common infrastructure patterns
+devops-cli terraform apply-pattern \
+  --pattern vpc-with-eks \
+  --vars environment=staging
+
+# Generate Terraform documentation
+devops-cli terraform docs-generate
+```
+
+```bash tab="AWS"
+# Create a new EKS cluster
+devops-cli aws create-eks \
+  --name my-cluster \
+  --region us-west-2 \
+  --node-type t3.medium \
+  --nodes 3
+
+# Set up S3 bucket with versioning
+devops-cli aws create-s3 \
+  --name my-bucket \
+  --versioning \
+  --encryption
+
+# Configure AWS IAM roles
+devops-cli aws setup-iam \
+  --env production \
+  --service eks
+```
+
+```bash tab="Kubernetes"
+# Deploy a standard monitoring stack
+devops-cli k8s deploy-monitoring \
+  --prometheus \
+  --grafana \
+  --namespace monitoring
+
+# Set up ingress controller
+devops-cli k8s setup-ingress \
+  --type nginx \
+  --ssl
+
+# Configure auto-scaling
+devops-cli k8s configure-hpa \
+  --deployment my-app \
+  --min 2 \
+  --max 10 \
+  --cpu-threshold 80
+```
+</Tabs>
+
+### CI/CD Pipeline Management
+
+Tools for managing your continuous integration and deployment workflows:
+
+```bash
+# Create a new CI/CD pipeline
+devops-cli pipeline create \
+  --type github-actions \
+  --template nodejs-aws \
+  --name my-app-pipeline
+
+# Add quality gates
+devops-cli pipeline add-quality-gate \
+  --type sonarqube \
+  --coverage 80 \
+  --security-rating A
+
+# Configure deployment environments
+devops-cli pipeline env-setup \
+  --env staging \
+  --approval-required \
+  --notify slack
+```
+
+### Monitoring & Logging
+
+Tools for setting up and managing observability:
+
+```bash
+# Deploy monitoring stack
+devops-cli monitor deploy \
+  --prometheus \
+  --grafana \
+  --alertmanager
+
+# Configure log aggregation
+devops-cli logs setup \
+  --type elastic \
+  --retention 30d \
+  --indexes my-app-*
+
+# Set up dashboards
+devops-cli dashboard create \
+  --type grafana \
+  --template nodejs-service \
+  --datasource prometheus
+```
+
+## Custom Automation Scripts
+
+### Project Scaffolding
+
+Quickly set up new projects with best practices:
+
+```bash
+# Create a new microservice project
+devops-cli scaffold microservice \
+  --name user-service \
+  --lang nodejs \
+  --docker \
+  --helm
+
+# Set up GitOps repository
+devops-cli scaffold gitops \
+  --name my-infrastructure \
+  --tool argocd \
+  --structure mono-repo
+
+# Initialize documentation
+devops-cli scaffold docs \
+  --type mkdocs \
+  --theme material
+```
+
+### Security & Compliance
+
+Tools for managing security and compliance:
+
+```bash
+# Run security scan
+devops-cli security scan \
+  --type container \
+  --image my-app:latest \
+  --fail-on high
+
+# Encrypt secrets
+devops-cli secrets encrypt \
+  --file secrets.yaml \
+  --tool sops \
+  --provider aws-kms
+
+# Audit permissions
+devops-cli audit permissions \
+  --scope aws-iam \
+  --report json
+```
+
+## Configuration Management
+
+You can customize the CLI behavior using a configuration file:
+
+```yaml title="~/.config/devops-playground/cli-config.yaml"
+default_provider: aws
+default_region: us-west-2
+
+terraform:
+  backend: s3
+  workspace_prefix: devops
+  patterns_dir: ~/.devops/terraform-patterns
+
+kubernetes:
+  default_namespace: devops
+  monitoring_stack: prometheus-operator
+  ingress_class: nginx
+
+ci_cd:
+  default_platform: github-actions
+  templates_dir: ~/.devops/pipeline-templates
+  notify:
+    slack_webhook: ${SLACK_WEBHOOK_URL}
+
+monitoring:
+  grafana_admin_user: admin
+  prometheus_retention: 15d
+  alert_receivers:
+    - type: slack
+      channel: "#alerts"
+```
+
+## Advanced Usage
+
+### Custom Scripts Integration
+
+You can extend the CLI with your own scripts:
+
+```bash
+# Add a custom script
+devops-cli scripts add \
+  --name deploy-database \
+  --path ./scripts/db-deploy.sh \
+  --description "Deploy PostgreSQL database"
+
+# Run custom script
+devops-cli scripts run deploy-database \
+  --env production \
+  --version 13.4
+```
+
+### Automation Workflows
+
+Create complex automation workflows:
+
+```bash
+# Create a new workflow
+devops-cli workflow create \
+  --name release-service \
+  --steps build,test,scan,deploy
+
+# Execute workflow
+devops-cli workflow run release-service \
+  --service my-app \
+  --version 1.0.0
+```
+
+<Callout type="warning" title="Script Permissions">
+Always review custom scripts and workflows before execution. Some commands may require elevated permissions or specific cloud provider access.
+</Callout>
+
+## Next Steps
+
+1. Explore the [Infrastructure as Code examples](/docs/infrastructure)
+2. Learn about [CI/CD pipeline patterns](/docs/cicd)
+3. Set up [monitoring and alerting](/docs/monitoring)
+4. Configure [security tools](/docs/security)
+
+
+

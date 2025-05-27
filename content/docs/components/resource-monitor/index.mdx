@@ -1,0 +1,123 @@
+---
+title: Resource Monitor
+description: Interactive component for real-time monitoring of cloud resources and infrastructure
+icon: LineChart
+---
+
+# Resource Monitor Component
+
+The Resource Monitor component provides real-time visualization of infrastructure resources, including CPU, memory, network, and storage metrics.
+
+## Features
+
+- Real-time metric visualization
+- Customizable thresholds and alerts
+- Support for multiple cloud providers
+- Interactive graphs and charts
+- Resource usage predictions
+
+## Usage
+
+```tsx
+import { ResourceMonitor } from "@/components/resource-monitor"
+
+export default function InfrastructureMonitoring() {
+  return (
+    <ResourceMonitor
+      resources={[
+        {
+          type: "kubernetes",
+          cluster: "production-cluster",
+          metrics: ["cpu", "memory", "pods"]
+        },
+        {
+          type: "aws-ec2",
+          region: "us-west-2",
+          instanceIds: ["i-1234567890abcdef0"]
+        }
+      ]}
+      refreshInterval={5000}
+      alertThresholds={{
+        cpu: 80,
+        memory: 90,
+        disk: 85
+      }}
+    />
+  )
+}
+```
+
+## API Reference
+
+### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `resources` | `Resource[]` | Array of resources to monitor |
+| `refreshInterval` | `number` | Update interval in milliseconds |
+| `alertThresholds` | `Thresholds` | Alert threshold configuration |
+| `onAlert` | `(alert: Alert) => void` | Alert callback function |
+
+### Resource Types
+
+```typescript
+interface Resource {
+  type: "kubernetes" | "aws-ec2" | "azure-vm" | "gcp-instance";
+  region?: string;
+  metrics: string[];
+  // Additional provider-specific fields
+}
+
+interface Thresholds {
+  cpu: number;
+  memory: number;
+  disk: number;
+  network?: number;
+}
+```
+
+## Examples
+
+### Basic Kubernetes Monitoring
+
+```tsx
+<ResourceMonitor
+  resources={[
+    {
+      type: "kubernetes",
+      cluster: "dev-cluster",
+      namespace: "default",
+      metrics: ["cpu", "memory", "pods", "network"]
+    }
+  ]}
+  refreshInterval={10000}
+/>
+```
+
+### Multi-Cloud Monitoring
+
+```tsx
+<ResourceMonitor
+  resources={[
+    {
+      type: "aws-ec2",
+      region: "us-west-2",
+      instanceIds: ["i-1234567890abcdef0"]
+    },
+    {
+      type: "azure-vm",
+      resourceGroup: "production",
+      vmName: "web-server-1"
+    }
+  ]}
+  alertThresholds={{
+    cpu: 75,
+    memory: 80,
+    disk: 90
+  }}
+  onAlert={(alert) => {
+    console.log("Resource alert:", alert);
+    // Handle alert (e.g., send to notification system)
+  }}
+/>
+``` 

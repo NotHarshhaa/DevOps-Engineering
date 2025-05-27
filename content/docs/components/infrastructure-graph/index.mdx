@@ -1,0 +1,262 @@
+---
+title: Infrastructure Graph
+description: Interactive graph visualization for cloud infrastructure and service dependencies
+icon: Graph
+---
+
+# Infrastructure Graph Component
+
+The Infrastructure Graph component provides a dynamic visualization of cloud infrastructure, services, and their dependencies using an interactive force-directed graph.
+
+## Features
+
+- Interactive node exploration
+- Real-time infrastructure updates
+- Multi-cloud resource visualization
+- Service dependency mapping
+- Cost and performance overlays
+- Security group visualization
+
+## Usage
+
+```tsx
+import { InfrastructureGraph } from "@/components/infrastructure-graph"
+
+export default function InfrastructureMap() {
+  return (
+    <InfrastructureGraph
+      resources={{
+        nodes: [
+          {
+            id: "vpc-main",
+            type: "aws-vpc",
+            name: "Main VPC",
+            region: "us-west-2"
+          },
+          {
+            id: "eks-cluster",
+            type: "kubernetes",
+            name: "Production EKS",
+            parent: "vpc-main"
+          },
+          {
+            id: "rds-main",
+            type: "aws-rds",
+            name: "Main Database",
+            parent: "vpc-main"
+          }
+        ],
+        edges: [
+          {
+            from: "eks-cluster",
+            to: "rds-main",
+            type: "network",
+            direction: "bidirectional"
+          }
+        ]
+      }}
+      overlays={["cost", "security"]}
+      onNodeClick={(node) => {
+        console.log("Inspecting node:", node.name);
+      }}
+      layout="force-directed"
+    />
+  )
+}
+```
+
+## API Reference
+
+### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `resources` | `Infrastructure` | Infrastructure configuration |
+| `overlays` | `string[]` | Active data overlays |
+| `layout` | `LayoutType` | Graph layout algorithm |
+| `onNodeClick` | `(node: Node) => void` | Node click handler |
+| `onEdgeClick` | `(edge: Edge) => void` | Edge click handler |
+
+### Infrastructure Types
+
+```typescript
+interface Infrastructure {
+  nodes: Node[];
+  edges: Edge[];
+}
+
+interface Node {
+  id: string;
+  type: ResourceType;
+  name: string;
+  parent?: string;
+  metadata?: Record<string, any>;
+  status?: "active" | "warning" | "error";
+}
+
+interface Edge {
+  from: string;
+  to: string;
+  type: "network" | "dependency" | "data-flow";
+  direction: "inbound" | "outbound" | "bidirectional";
+  metadata?: Record<string, any>;
+}
+
+type ResourceType = 
+  | "aws-vpc" 
+  | "aws-ec2" 
+  | "aws-rds"
+  | "aws-s3"
+  | "kubernetes"
+  | "azure-vnet"
+  | "gcp-vpc";
+
+type LayoutType = 
+  | "force-directed"
+  | "hierarchical"
+  | "circular"
+  | "grid";
+```
+
+## Examples
+
+### AWS Infrastructure Map
+
+```tsx
+<InfrastructureGraph
+  resources={{
+    nodes: [
+      {
+        id: "vpc-prod",
+        type: "aws-vpc",
+        name: "Production VPC",
+        region: "us-west-2"
+      },
+      {
+        id: "eks-prod",
+        type: "kubernetes",
+        name: "EKS Cluster",
+        parent: "vpc-prod",
+        metadata: {
+          version: "1.24",
+          nodeCount: 5
+        }
+      },
+      {
+        id: "rds-prod",
+        type: "aws-rds",
+        name: "Production DB",
+        parent: "vpc-prod",
+        metadata: {
+          engine: "postgres",
+          version: "14.6"
+        }
+      },
+      {
+        id: "s3-assets",
+        type: "aws-s3",
+        name: "Asset Bucket",
+        metadata: {
+          size: "2.5TB"
+        }
+      }
+    ],
+    edges: [
+      {
+        from: "eks-prod",
+        to: "rds-prod",
+        type: "network",
+        direction: "bidirectional",
+        metadata: {
+          port: 5432,
+          protocol: "tcp"
+        }
+      },
+      {
+        from: "eks-prod",
+        to: "s3-assets",
+        type: "data-flow",
+        direction: "bidirectional"
+      }
+    ]
+  }}
+  overlays={["cost", "security", "performance"]}
+  layout="hierarchical"
+  onNodeClick={(node) => {
+    showResourceDetails(node);
+  }}
+  onEdgeClick={(edge) => {
+    showConnectionDetails(edge);
+  }}
+/>
+```
+
+### Multi-Cloud Infrastructure
+
+```tsx
+<InfrastructureGraph
+  resources={{
+    nodes: [
+      {
+        id: "aws-vpc",
+        type: "aws-vpc",
+        name: "AWS VPC",
+        region: "us-west-2"
+      },
+      {
+        id: "azure-vnet",
+        type: "azure-vnet",
+        name: "Azure VNet",
+        region: "eastus"
+      },
+      {
+        id: "gcp-vpc",
+        type: "gcp-vpc",
+        name: "GCP VPC",
+        region: "us-central1"
+      },
+      {
+        id: "aws-eks",
+        type: "kubernetes",
+        name: "AWS EKS",
+        parent: "aws-vpc"
+      },
+      {
+        id: "azure-aks",
+        type: "kubernetes",
+        name: "Azure AKS",
+        parent: "azure-vnet"
+      }
+    ],
+    edges: [
+      {
+        from: "aws-vpc",
+        to: "azure-vnet",
+        type: "network",
+        direction: "bidirectional",
+        metadata: {
+          connection: "vpn",
+          bandwidth: "1Gbps"
+        }
+      },
+      {
+        from: "azure-vnet",
+        to: "gcp-vpc",
+        type: "network",
+        direction: "bidirectional",
+        metadata: {
+          connection: "interconnect",
+          bandwidth: "10Gbps"
+        }
+      }
+    ]
+  }}
+  overlays={["cost", "latency"]}
+  layout="force-directed"
+  onNodeClick={(node) => {
+    if (node.status === "warning") {
+      showAlerts(node);
+    }
+  }}
+/>
+``` 

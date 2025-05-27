@@ -1,0 +1,124 @@
+---
+title: DevOps Component Examples
+description: Interactive examples of DevOps monitoring and visualization components
+---
+
+# DevOps Component Examples
+
+## Resource Monitor
+
+Monitor your cloud resources in real-time:
+
+<Preview
+  component="resource-monitor"
+  props={{
+    resources: [
+      {
+        type: "kubernetes",
+        cluster: "production-cluster",
+        region: "us-west-2",
+        metrics: ["cpu", "memory", "pods", "network"]
+      },
+      {
+        type: "aws-ec2",
+        region: "us-west-2",
+        instanceIds: ["i-1234567890abcdef0"],
+        metrics: ["cpu", "memory", "disk", "network"]
+      }
+    ],
+    refreshInterval: 5000,
+    alertThresholds: {
+      cpu: 80,
+      memory: 90,
+      disk: 85
+    }
+  }}
+/>
+
+## Pipeline Visualizer
+
+Visualize your CI/CD pipelines:
+
+<Preview
+  component="pipeline-visualizer"
+  props={{
+    pipeline: {
+      id: "main-deploy",
+      platform: "github-actions",
+      repository: "org/service",
+      branch: "main",
+      stages: [
+        {
+          name: "lint",
+          status: "success",
+          duration: "45s"
+        },
+        {
+          name: "test",
+          status: "running",
+          steps: ["unit", "integration", "e2e"]
+        },
+        {
+          name: "deploy",
+          status: "pending",
+          environment: "production",
+          dependencies: ["test"]
+        }
+      ]
+    }
+  }}
+/>
+
+## Infrastructure Graph
+
+Map your cloud infrastructure:
+
+<Preview
+  component="infrastructure-graph"
+  props={{
+    resources: {
+      nodes: [
+        {
+          id: "vpc-prod",
+          type: "aws-vpc",
+          name: "Production VPC",
+          region: "us-west-2"
+        },
+        {
+          id: "eks-cluster",
+          type: "kubernetes",
+          name: "Main EKS Cluster",
+          parent: "vpc-prod",
+          metadata: {
+            version: "1.24",
+            nodeCount: 5
+          }
+        },
+        {
+          id: "rds-main",
+          type: "aws-rds",
+          name: "Production Database",
+          parent: "vpc-prod",
+          metadata: {
+            engine: "postgres",
+            version: "14.6"
+          }
+        }
+      ],
+      edges: [
+        {
+          from: "eks-cluster",
+          to: "rds-main",
+          type: "network",
+          direction: "bidirectional",
+          metadata: {
+            port: 5432,
+            protocol: "tcp"
+          }
+        }
+      ]
+    },
+    overlays: ["cost", "security"],
+    layout: "hierarchical"
+  }}
+/> 
