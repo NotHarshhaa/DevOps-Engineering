@@ -62,9 +62,9 @@ export function BlogTitle({
 }) {
   const pinned = useHeadroom({ fixedAt: 120 });
   const [_scroll, scrollTo] = useWindowScroll();
-
   const { inViewport, ref } = useInViewport();
   const isMobile = useIsMobile();
+  
   return (
     <>
       <>
@@ -78,27 +78,24 @@ export function BlogTitle({
             top: isMobile ? 56 : 66,
             zIndex: 2,
           }}
-          className={`container flex w-full flex-row items-center gap-2 border bg-linear-to-r from-violet-800 to-teal-700 py-3 md:rounded-xl md:px-4`}
+          className={`container flex w-full flex-col items-start gap-2 border bg-linear-to-r from-violet-800 to-teal-700 py-3 md:rounded-xl md:px-4`}
         >
-          <div>
-            {" "}
+          <div className="w-full">
             <Button
               asChild
               variant="link"
               size="sm"
-              className="text-text pl-0 text-white underline"
+              className="text-text mb-2 pl-0 text-white underline"
             >
               <Link href="/blog">
-                <ArrowLeft /> Back to Blog
+                <ArrowLeft className="mr-1" /> Back to Blog
               </Link>
             </Button>
-            <h1
-              className={`text-md mb-2 text-xl font-bold text-white md:text-3xl`}
-            >
+            <h1 className={`text-md mb-3 text-xl font-bold text-white md:text-3xl`}>
               {title}
             </h1>
             <motion.p
-              className="mb-2 text-white md:text-xl"
+              className="mb-4 text-sm text-white/90 md:text-xl"
               animate={{
                 height: "auto",
                 opacity: 1,
@@ -108,21 +105,20 @@ export function BlogTitle({
               {description}
             </motion.p>
             <Separator className="bg-muted-foreground/50 my-4" />
-            <div className="flex flex-row items-center gap-4 text-sm text-white">
-              <div className="flex gap-2">
-                <p className="mb-1">Written by:</p>
+            <div className="flex flex-col gap-4 text-sm text-white md:flex-row md:items-center">
+              <div className="flex items-center gap-2">
+                <p>Written by:</p>
                 <p className="font-medium">{author}</p>
               </div>
-              <div className="flex gap-2">
-                <p className="mb-1">At:</p>
+              <div className="flex items-center gap-2">
+                <p>At:</p>
                 <p className="font-medium">
                   {new Date(date ?? name).toDateString()}
                 </p>
               </div>
-
-              <div className="flex gap-2">
-                <p className="mb-1">Tags:</p>
-                <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
+                <p>Tags:</p>
+                <div className="flex flex-wrap gap-2">
                   {tags?.map((tag) => (
                     <Badge
                       variant="secondary"
