@@ -1,4 +1,5 @@
 import { getMDXComponents } from "@/components/docs/mdx-components";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { metadataImage } from "@/lib/metadata";
 import { source } from "@/lib/source";
 import {
@@ -9,59 +10,8 @@ import {
 } from "fumadocs-ui/page";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+
 import { notFound } from "next/navigation";
-
-export default async function Page(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
-  const params = await props.params;
-  // If no slug is provided (i.e., /docs), use 'index'
-  const slugToUse = !params.slug || params.slug.length === 0 ? ['index'] : params.slug;
-  const page = source.getPage(slugToUse);
-
-  if (!page) notFound();
-
-  const MDX = page.data.body;
-
-  return (
-    <DocsPage
-      tableOfContent={{
-        footer: <StackzeroApiCta />,
-        single: false,
-        style: "clerk",
-      }}
-      toc={page.data.toc}
-      full={page.data.full}
-    >
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
-      <DocsBody className="">
-        <MDX components={getMDXComponents({})} />
-      </DocsBody>
-    </DocsPage>
-  );
-}
-
-export async function generateStaticParams() {
-  const paths = source.generateParams();
-  // Include the root path (empty slug array) in the static paths
-  return [{ slug: [] }, ...paths];
-}
-
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
-  const params = await props.params;
-  const slugToUse = !params.slug || params.slug.length === 0 ? ['index'] : params.slug;
-  const page = source.getPage(slugToUse);
-  if (!page) notFound();
-
-  return metadataImage.withImage(page.slugs, {
-    description: page.data.description,
-    title: page.data.title,
-  });
-}
-
 const StackzeroApiCta = () => {
   return (
     <div className="mt-6 flex flex-col gap-4 rounded-md border p-2">
@@ -88,3 +38,52 @@ const StackzeroApiCta = () => {
     </div>
   );
 };
+
+export default async function Page(props: {
+  params: Promise<{ slug?: string[] }>;
+}) {
+  const params = await props.params;
+  const page = source.getPage(params.slug);
+
+  // console.log("page", page);
+  if (!page) notFound();
+
+  const MDX = page.data.body;
+
+  return (
+    <DocsPage
+      tableOfContent={{
+        footer: <StackzeroApiCta />,
+        single: false,
+        style: "clerk",
+      }}
+      toc={page.data.toc}
+      full={page.data.full}
+    >
+      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsDescription>{page.data.description}</DocsDescription>
+      <DocsBody className="">
+        {/* <MDX components={{ ...defaultMdxComponents }} /> */}
+        <MDX components={getMDXComponents({})} />
+        {/* {page.data.index ? <DocsCategory page={page} from={source} /> : null} */}
+      </DocsBody>
+    </DocsPage>
+  );
+}
+
+export async function generateStaticParams() {
+  return source.generateParams();
+}
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug?: string[] }>;
+}) {
+  const params = await props.params;
+  const page = source.getPage(params.slug);
+  if (!page) notFound();
+
+  return metadataImage.withImage(page.slugs, {
+    description: page.data.description,
+    title: page.data.title,
+  });
+}

@@ -117,7 +117,7 @@ export function DocsLayout({
             </SidebarViewport>
             <SidebarFooter className={cn(!sidebarFooter && "md:hidden")}>
               {!props.disableThemeSwitch ? (
-                <ThemeToggle />
+                <ThemeToggle className="w-fit md:hidden" />
               ) : null}
               {sidebarFooter}
             </SidebarFooter>
@@ -193,7 +193,7 @@ function DocsNavbar({
           <Languages className="size-5" />
         </LanguageToggle>
       ) : null}
-      <ThemeToggle />
+      <ThemeToggle className="max-md:hidden" mode="light-dark" />
     </Navbar>
   );
 }
