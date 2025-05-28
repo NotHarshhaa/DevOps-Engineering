@@ -236,11 +236,22 @@ export function BlogTitle({
         </motion.div> */}
         <motion.div ref={ref}></motion.div>
         {!inViewport && (
-          <div className="fixed right-10 bottom-5 z-50">
-            <Button variant="outline" onClick={() => scrollTo({ y: 0 })}>
-              <ChevronUp /> Back to top
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-6 right-6 z-50 md:bottom-8 md:right-8"
+          >
+            <Button 
+              variant="default"
+              size="icon"
+              onClick={() => scrollTo({ y: 0 })}
+              className="bg-primary hover:bg-primary/90 text-white shadow-lg rounded-full size-10 md:size-12"
+            >
+              <ChevronUp className="size-5 md:size-6" />
+              <span className="sr-only">Back to top</span>
             </Button>
-          </div>
+          </motion.div>
         )}
       </>
     </>
