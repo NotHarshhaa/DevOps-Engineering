@@ -69,67 +69,152 @@ export function BlogTitle({
     <>
       <>
         <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           style={{
             height: "fit-content",
-            left: 0,
-            padding: isMobile ? "1rem" : "3rem",
             position: "relative",
-            right: 0,
-            top: isMobile ? 56 : 66,
+            top: isMobile ? 36 : 46,
             zIndex: 2,
           }}
-          className={`container flex w-full flex-col items-start gap-2 border bg-linear-to-r from-violet-800 to-teal-700 py-3 md:rounded-xl md:px-4`}
+          className="container px-4 py-4 md:px-6 md:py-6"
         >
-          <div className="w-full">
-            <Button
-              asChild
-              variant="link"
-              size="sm"
-              className="text-text mb-2 pl-0 text-white underline"
-            >
-              <Link href="/blog">
-                <ArrowLeft className="mr-1" /> Back to Blog
-              </Link>
-            </Button>
-            <h1 className={`text-md mb-3 text-xl font-bold text-white md:text-3xl`}>
-              {title}
-            </h1>
-            <motion.p
-              className="mb-4 text-sm text-white/90 md:text-xl"
-              animate={{
-                height: "auto",
-                opacity: 1,
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              {description}
-            </motion.p>
-            <Separator className="bg-muted-foreground/50 my-4" />
-            <div className="flex flex-col gap-4 text-sm text-white md:flex-row md:items-center">
-              <div className="flex items-center gap-2">
-                <p>Written by:</p>
-                <p className="font-medium">{author}</p>
+          <div className="relative mx-auto max-w-[1450px] overflow-hidden rounded-xl border bg-gradient-to-br from-violet-900 via-violet-800 to-teal-700 shadow-lg">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
+
+            <div className="relative px-6 py-8 md:px-8">
+              {/* Back to blog link */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Button
+                  asChild
+                  variant="link"
+                  size="sm"
+                  className="group mb-4 pl-0 text-white/80 hover:text-white"
+                >
+                  <Link href="/blog">
+                    <ArrowLeft className="mr-2 transition-transform group-hover:-translate-x-1" />
+                    Back to Blog
+                  </Link>
+                </Button>
+              </motion.div>
+
+              {/* Title and description */}
+              <div className="space-y-3">
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-balance text-xl font-bold leading-tight text-white md:text-3xl lg:text-4xl"
+                >
+                  {title}
+                </motion.h1>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-balance text-base text-white/80 md:text-lg"
+                >
+                  {description}
+                </motion.p>
               </div>
-              <div className="flex items-center gap-2">
-                <p>At:</p>
-                <p className="font-medium">
-                  {new Date(date ?? name).toDateString()}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <p>Tags:</p>
-                <div className="flex flex-wrap gap-2">
-                  {tags?.map((tag) => (
-                    <Badge
-                      variant="secondary"
-                      key={tag}
-                      className="bg-gray-200 font-medium text-zinc-800"
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
+
+              {/* Metadata section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-4 md:flex-row md:items-center md:gap-6"
+              >
+                {/* Author and date */}
+                <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
+                  <div className="flex items-center gap-2">
+                    <div className="size-6 rounded-full bg-white/10 p-1">
+                      <svg
+                        className="size-full text-white/80"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-white/80 md:text-sm">
+                      Written by{" "}
+                      <span className="font-medium text-white">{author}</span>
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="size-6 rounded-full bg-white/10 p-1">
+                      <svg
+                        className="size-full text-white/80"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-white/80 md:text-sm">
+                      <span className="font-medium text-white">
+                        {new Date(date ?? name).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </p>
+                  </div>
                 </div>
-              </div>
+
+                {/* Tags */}
+                {tags && tags.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="size-6 rounded-full bg-white/10 p-1">
+                      <svg
+                        className="size-full text-white/80"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="bg-white/10 text-xs font-medium text-white hover:bg-white/20 md:text-sm"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
             </div>
           </div>
         </motion.div>
@@ -234,25 +319,8 @@ export function BlogTitle({
             </motion.p>
           </div>
         </motion.div> */}
+
         <motion.div ref={ref}></motion.div>
-        {!inViewport && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-6 right-6 z-50 md:bottom-8 md:right-8"
-          >
-            <Button 
-              variant="default"
-              size="icon"
-              onClick={() => scrollTo({ y: 0 })}
-              className="bg-primary hover:bg-primary/90 text-white shadow-lg rounded-full size-10 md:size-12"
-            >
-              <ChevronUp className="size-5 md:size-6" />
-              <span className="sr-only">Back to top</span>
-            </Button>
-          </motion.div>
-        )}
       </>
     </>
   );
@@ -264,28 +332,53 @@ export const BlogTOC = () => {
   });
 
   const headings = data.map((heading, index) => (
-    <div key={heading.id} className="relative hidden lg:block">
+    <motion.div
+      key={heading.id}
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="relative hidden lg:block"
+    >
       <div
-        className={`bg-primary absolute h-full w-[2px] transition-all duration-500 ${index === active ? "opacity-100" : "opacity-0"}`}
-      ></div>
-      <div
+        className={cn(
+          "absolute left-0 top-0 h-full w-[2px] rounded-full transition-all duration-300",
+          index === active
+            ? "bg-gradient-to-b from-violet-500 to-teal-500 opacity-100"
+            : "bg-muted opacity-0"
+        )}
+      />
+      <button
+        onClick={() => heading.getNode().scrollIntoView({ behavior: "smooth" })}
         style={{
-          listStylePosition: "inside",
-          paddingInlineStart: heading.depth * 10,
-          // background: index === spy.active ? "blue" : undefined,
+          paddingInlineStart: `${heading.depth * 12}px`,
         }}
-        className={`cursor-pointer border-l py-1 text-sm ${index === active ? "text-primary" : "text-muted-foreground"} transition-all duration-300`}
+        className={cn(
+          "group flex w-full items-center gap-2 py-2 pl-4 pr-2 text-sm transition-all duration-300",
+          index === active
+            ? "font-medium text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        )}
       >
-        <a className="" onClick={() => heading.getNode().scrollIntoView()}>
-          {heading.value}
-        </a>
-      </div>
-    </div>
+        <div
+          className={cn(
+            "size-1.5 rounded-full transition-all duration-300",
+            index === active
+              ? "bg-gradient-to-r from-violet-500 to-teal-500"
+              : "bg-muted group-hover:bg-foreground/50"
+          )}
+        />
+        <span className="truncate">{heading.value}</span>
+      </button>
+    </motion.div>
   ));
 
   return (
-    <div>
-      <div style={{ margin: 0, padding: 0 }}>{headings}</div>
+    <div className="sticky top-24 w-64 shrink-0">
+      <div className="mb-4 flex items-center gap-2 px-4">
+        <div className="h-4 w-1 rounded-full bg-gradient-to-b from-violet-500 to-teal-500" />
+        <h4 className="font-medium">Table of Contents</h4>
+      </div>
+      <div className="space-y-1 overflow-hidden">{headings}</div>
     </div>
   );
 };
