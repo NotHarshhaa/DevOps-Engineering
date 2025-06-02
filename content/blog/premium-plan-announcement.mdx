@@ -11,6 +11,9 @@ description: Explore our new Premium Plan offering unlimited access to 1000+ hig
 author: HARSHHAA
 ---
 
+import PricingCards from '../../components/PricingCards'
+import UPIQRCode from '../../components/UPIQRCode'
+
 # Introducing the Ultimate Premium Plan 🚀
 
 <div className="p-4 my-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-r-lg">
@@ -181,22 +184,22 @@ author: HARSHHAA
 
 ## Pricing Plans 💎
 
-import PricingCards from '../../components/PricingCards'
-
 <PricingCards />
 
 ## Ready to Get Started? 🚀
 
 <div className="p-4 my-6 bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-800 rounded-lg">
-  <div className="flex items-start">
-    <span className="text-2xl mr-2">📱</span>
+  <div className="flex flex-col items-start">
     <div>
       <h3 className="font-semibold">Quick Steps to Premium Access:</h3>
       <ol className="mt-2 list-decimal pl-4">
-        <li>Visit [docs.prodevopsguytech.com](https://docs.prodevopsguytech.com/)</li>
-        <li>Click "Upgrade to Premium"</li>
-        <li>Contact us on WhatsApp: **+91 7995905634**</li>
+        <li>Visit [docs.prodevopsguytech.com](https://docs.prodevopsguytech.com/) and explore the resources first to verify the quality and value before making a purchase</li>
+        <li>Scan the QR code below to make the payment</li>
+        <li>Click the WhatsApp button below to send your payment screenshot</li>
       </ol>
+      <div className="mt-6">
+        <UPIQRCode />
+      </div>
     </div>
   </div>
 </div>
