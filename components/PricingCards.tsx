@@ -50,14 +50,14 @@ export const tiers: PricingTier[] = [
     name: 'Premium',
     id: '1',
     href: 'https://docs-admin.prodevopsguytech.com/create-account',
-    price: { '1': '₹499 &  $15 USD' },
-    discountPrice: { '1': '' },
+    price: { '1': '₹699 & $18 USD' },
+    discountPrice: { '1': '₹499 & $15 USD' },
     description: `Full access to all DevOps & Cloud resources`,
     features: [
       `Unlimited file downloads`,
       `Priority WhatsApp support`,
       `Early access to new content`,
-      `Premium-only documentation`,
+      `Access to 1000+ Premium Docs`,
       `Weekly content updates`,
       `Lifetime access`,
       `No recurring fees`,
@@ -92,31 +92,12 @@ const cn = (...args: Array<string | boolean | undefined | null>) =>
 export default function PricingPage() {
   const [frequency, setFrequency] = useState(frequencies[0]);
 
-  const bannerText = 'Choose Your Plan';
-
   return (
     <div
       className={cn('flex flex-col w-full items-center', styles.fancyOverlay)}
     >
       <div className="w-full flex flex-col items-center">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col items-center">
-          <div className="w-full lg:w-auto mx-auto max-w-4xl lg:text-center">
-            <h1 className="text-black dark:text-white text-4xl font-semibold max-w-xs sm:max-w-none md:text-6xl !leading-tight">
-              Pricing
-            </h1>
-
-            <p className="text-black dark:text-white mt-6 md:text-xl lg:text-center max-w-prose">
-              Get access to high-quality DevOps & Cloud resources
-            </p>
-          </div>
-
-          {bannerText ? (
-            <div className="w-full lg:w-auto flex justify-center my-4">
-              <p className="w-full px-4 py-3 text-xs bg-slate-100 text-black dark:bg-slate-300/30 dark:text-white/80 rounded-xl">
-                {bannerText}
-              </p>
-            </div>
-          ) : null}
 
           {frequencies.length > 1 ? (
             <div className="mt-16 flex justify-center">
@@ -168,7 +149,7 @@ export default function PricingPage() {
           <div
             className={cn(
               'isolate mx-auto mt-4 mb-28 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none select-none',
-              tiers.length === 2 ? 'lg:grid-cols-2' : '',
+              tiers.length === 2 ? 'lg:grid-cols-2 lg:max-w-4xl' : '',
               tiers.length === 3 ? 'lg:grid-cols-3' : '',
             )}
           >
@@ -179,7 +160,7 @@ export default function PricingPage() {
                   tier.featured
                     ? '!bg-gray-900 ring-gray-900 dark:!bg-gray-100 dark:ring-gray-100'
                     : 'bg-white dark:bg-gray-900/80 ring-gray-300/70 dark:ring-gray-700',
-                  'max-w-xs ring-1 rounded-3xl p-8 xl:p-10',
+                  'min-w-[300px] lg:min-w-[380px] ring-1 rounded-3xl p-8 xl:p-10',
                   tier.highlighted ? styles.fancyGlassContrast : '',
                 )}
               >
@@ -187,10 +168,20 @@ export default function PricingPage() {
                   id={tier.id}
                   className={cn(
                     tier.featured ? 'text-white dark:text-black' : 'text-black dark:text-white',
-                    'text-2xl font-bold tracking-tight',
+                    'text-2xl font-bold tracking-tight flex items-center gap-3 flex-wrap',
                   )}
                 >
                   {tier.name}
+                  {tier.featured && (
+                    <>
+                      <span className="inline-flex items-center rounded-full bg-indigo-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                        Most Popular
+                      </span>
+                      <span className="inline-flex items-center rounded-full bg-green-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                        28% OFF
+                      </span>
+                    </>
+                  )}
                 </h3>
                 <p
                   className={cn(
@@ -202,43 +193,43 @@ export default function PricingPage() {
                 >
                   {tier.description}
                 </p>
-                <p className="mt-6 flex items-baseline gap-x-1">
-                  <span
-                    className={cn(
-                      tier.featured ? 'text-white dark:text-black' : 'text-black dark:text-white',
-                      'text-4xl font-bold tracking-tight',
-                      tier.discountPrice && typeof tier.discountPrice === 'object' && tier.discountPrice[frequency.value]
-                        ? 'line-through'
-                        : '',
-                    )}
-                  >
-                    {typeof tier.price === 'string'
-                      ? tier.price
-                      : tier.price[frequency.value]}
-                  </span>
-
-                  <span
-                    className={cn(
-                      tier.featured ? 'text-white dark:text-black' : 'text-black dark:text-white',
-                    )}
-                  >
-                    {typeof tier.discountPrice === 'string'
-                      ? tier.discountPrice
-                      : tier.discountPrice[frequency.value]}
-                  </span>
-
-                  {typeof tier.price !== 'string' ? (
+                <p className="mt-6 flex flex-col gap-2">
+                  {tier.featured && (
+                    <span className="flex items-center gap-x-1">
+                      <span className={cn(
+                        'text-2xl font-semibold line-through text-gray-400 dark:text-gray-600'
+                      )}>
+                        ₹699 & $18 USD
+                      </span>
+                    </span>
+                  )}
+                  <span className="flex items-center gap-x-1">
                     <span
                       className={cn(
-                        tier.featured
-                          ? 'text-gray-300 dark:text-gray-500'
-                          : 'dark:text-gray-400 text-gray-600',
-                        'text-sm font-semibold leading-6',
+                        tier.featured ? 'text-white dark:text-black' : 'text-black dark:text-white',
+                        'text-4xl font-bold tracking-tight',
                       )}
                     >
-                      {frequency.priceSuffix}
+                      {typeof tier.discountPrice === 'string'
+                        ? tier.discountPrice
+                        : tier.discountPrice[frequency.value] || (typeof tier.price === 'string'
+                        ? tier.price
+                        : tier.price[frequency.value])}
                     </span>
-                  ) : null}
+
+                    {typeof tier.price !== 'string' ? (
+                      <span
+                        className={cn(
+                          tier.featured
+                            ? 'text-gray-300 dark:text-gray-500'
+                            : 'dark:text-gray-400 text-gray-600',
+                          'text-sm font-semibold leading-6 ml-2',
+                        )}
+                      >
+                        {frequency.priceSuffix}
+                      </span>
+                    ) : null}
+                  </span>
                 </p>
                 <a
                   href={tier.href}
