@@ -49,7 +49,7 @@ export const tiers: PricingTier[] = [
   {
     name: 'Premium',
     id: '1',
-    href: 'https://wa.me/917995905634',
+    href: 'https://docs-admin.prodevopsguytech.com/create-account',
     price: { '1': '₹499 &  $15 USD' },
     discountPrice: { '1': '' },
     description: `Full access to all DevOps & Cloud resources`,
