@@ -1,6 +1,7 @@
 import { ComponentLoader } from "@/components/docs/component-loader";
 import { registry } from "@/registry";
 import { notFound } from "next/navigation";
+import { Viewport } from "next";
 // Arrays to categorize components
 const NOT_CENTERED_COMPONENTS: string[] = ["product-variant-02-block"];
 
@@ -61,3 +62,11 @@ export async function generateStaticParams() {
 
   return allComponents;
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 2,
+  userScalable: true,
+  themeColor: "#000000"
+};

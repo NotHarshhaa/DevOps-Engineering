@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { baseOptions, linkItems } from "@/app/layout.config";
 import { source } from "@/lib/source";
 import { DocsLayout, DocsLayoutProps } from "@/components/notebook";
+import { Viewport } from "next";
 
 const docsOptions: DocsLayoutProps = {
   ...baseOptions,
@@ -14,3 +15,11 @@ const docsOptions: DocsLayoutProps = {
 export default function Layout({ children }: { children: ReactNode }) {
   return <DocsLayout {...docsOptions}>{children}</DocsLayout>;
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 2,
+  userScalable: true,
+  themeColor: "#000000"
+};

@@ -8,6 +8,7 @@ import {
   DocsPage,
   DocsTitle,
 } from "fumadocs-ui/page";
+import { Metadata, Viewport } from "next";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -77,7 +78,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>;
-}) {
+}): Promise<Metadata> {
   const params = await props.params;
   const page = source.getPage(params.slug);
   if (!page) notFound();
@@ -87,3 +88,11 @@ export async function generateMetadata(props: {
     title: page.data.title,
   });
 }
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 2,
+  userScalable: true,
+  themeColor: "#000000"
+};

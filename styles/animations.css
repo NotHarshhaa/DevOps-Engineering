@@ -1,0 +1,135 @@
+/* Optimized animations for better performance on all devices */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+/* Mobile-optimized animation durations */
+:root {
+  --animation-duration-slow: 700ms;
+  --animation-duration-medium: 500ms;
+  --animation-duration-fast: 300ms;
+  --animation-duration-instant: 150ms;
+}
+
+/* Reduce animation duration on mobile */
+@media (max-width: 768px) {
+  :root {
+    --animation-duration-slow: 500ms;
+    --animation-duration-medium: 300ms;
+    --animation-duration-fast: 200ms;
+    --animation-duration-instant: 100ms;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility classes */
+.animate-fade-in {
+  animation: fade-in var(--animation-duration-medium) ease forwards;
+}
+
+.animate-fade-up {
+  animation: fade-up var(--animation-duration-medium) ease-out forwards;
+}
+
+.animate-fade-down {
+  animation: fade-down var(--animation-duration-medium) ease-out forwards;
+}
+
+.animate-pulse {
+  animation: pulse var(--animation-duration-slow) ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Staggered animation classes */
+.stagger-items > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-items > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-items > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-items > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-items > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-items > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-items > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-items > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-items > *:nth-child(9) { animation-delay: 400ms; }
+.stagger-items > *:nth-child(10) { animation-delay: 450ms; }
+
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+  .stagger-items > * {
+    animation-delay: 0ms !important;
+  }
+
+  .mobile-no-animation {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .mobile-reduced-animation {
+    animation-duration: var(--animation-duration-instant) !important;
+    transition-duration: var(--animation-duration-instant) !important;
+  }
+}
+
+/* Hardware acceleration for smoother animations */
+.hw-accelerate {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

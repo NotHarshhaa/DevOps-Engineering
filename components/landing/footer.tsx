@@ -23,12 +23,12 @@ const socialLinks = [
 const Footer = () => {
   return (
     <footer className="relative w-full border-t bg-background">
-      <div className="mx-auto w-full px-4 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto w-full px-2 py-6 sm:px-4 md:px-6 sm:py-8 md:py-12">
         {/* Main Footer Content */}
         <div className="relative z-10 mb-12 sm:mb-16">
           {/* Brand Section */}
-          <div className="mx-auto max-w-[340px] text-center sm:max-w-xl">
-            <div className="mb-4 flex flex-col items-center justify-center gap-3 sm:mb-6 sm:flex-row sm:gap-2">
+          <div className="mx-auto max-w-[300px] sm:max-w-[340px] text-center md:max-w-xl">
+            <div className="mb-3 sm:mb-4 flex flex-col items-center justify-center gap-2 sm:gap-3 sm:flex-row">
               <Image
                 src="/logo.svg"
                 alt="logo"
@@ -48,20 +48,20 @@ const Footer = () => {
                 </p>
               </div>
             </div>
-            <p className="mb-6 px-4 text-xs text-muted-foreground sm:mb-8 sm:px-0 sm:text-sm">
-              A digital playground and lab bench where we experiment with DevOps tools, 
+            <p className="mb-4 sm:mb-6 px-2 sm:px-4 text-xs text-muted-foreground sm:text-sm">
+              A digital playground and lab bench where we experiment with DevOps tools,
               CI/CD workflows, and infrastructure automation.
             </p>
           </div>
         </div>
 
         {/* Main Navigation */}
-        <nav className="relative z-10 mb-6 flex flex-wrap items-center justify-center gap-4 sm:mb-8 sm:gap-x-8">
+        <nav className="relative z-10 mb-4 sm:mb-6 flex flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-x-8">
           {navigationLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors sm:text-sm"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors sm:text-sm px-1 py-1"
             >
               {link.label}
               </Link>
@@ -69,7 +69,7 @@ const Footer = () => {
         </nav>
 
         {/* Social Icons */}
-        <div className="relative z-10 mb-6 flex justify-center gap-5 sm:mb-8 sm:gap-6">
+        <div className="relative z-10 mb-4 sm:mb-6 flex justify-center gap-3 sm:gap-5 md:gap-6">
           {socialLinks.map((link) => (
               <Link
               key={link.label}
@@ -95,13 +95,13 @@ const Footer = () => {
         </div>
 
         {/* Background Text */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden px-4">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden px-2 sm:px-4">
           <div className="flex w-full flex-col items-center justify-center text-center">
             <div className="-mt-4 flex w-full flex-col items-center sm:mt-0">
-              <span className="w-full text-[72px] font-bold leading-[0.8] tracking-tighter text-muted/10 sm:text-[140px] lg:text-[200px]">
+              <span className="w-full text-[50px] font-bold leading-[0.8] tracking-tighter text-muted/10 sm:text-[100px] md:text-[140px] lg:text-[200px]">
                 devops-
               </span>
-              <span className="w-full text-[72px] font-bold leading-[0.8] tracking-tighter text-muted/10 sm:text-[140px] lg:text-[200px]">
+              <span className="w-full text-[50px] font-bold leading-[0.8] tracking-tighter text-muted/10 sm:text-[100px] md:text-[140px] lg:text-[200px]">
                 engineering
               </span>
             </div>
