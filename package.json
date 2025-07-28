@@ -2,6 +2,7 @@
   "name": "devops-engineering-playground",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "next build",
     "prebuild": "npm run build:registry",
