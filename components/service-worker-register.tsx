@@ -2,6 +2,18 @@
 
 import { useEffect } from "react";
 
+// Add NetworkInformation type
+interface NetworkInformation extends EventTarget {
+  effectiveType: string;
+  addEventListener: (type: string, listener: EventListener) => void;
+  removeEventListener: (type: string, listener: EventListener) => void;
+}
+
+// Extend Navigator type
+interface ExtendedNavigator extends Navigator {
+  connection?: NetworkInformation;
+}
+
 /**
  * A client component that registers the service worker for offline capabilities
  * and performance improvements. This should be imported and used in a client component.
@@ -87,7 +99,7 @@ export function ServiceWorkerRegister() {
           navigator.serviceWorker.ready
             .then((registration) => {
               if ("sync" in registration) {
-                // @ts-ignore: sync may not be typed in TS
+                // @ts-expect-error: sync is not yet in the TypeScript types
                 return registration.sync.register("sync-data");
               }
             })
@@ -100,11 +112,11 @@ export function ServiceWorkerRegister() {
 
         // Detect slow connections
         if ("connection" in navigator) {
-          const connection = navigator.connection as any;
+          const connection = (navigator as ExtendedNavigator).connection;
 
           if (
-            connection.effectiveType === "2g" ||
-            connection.effectiveType === "slow-2g"
+            connection?.effectiveType === "2g" ||
+            connection?.effectiveType === "slow-2g"
           ) {
             document.documentElement.classList.add("slow-connection");
 
@@ -118,10 +130,10 @@ export function ServiceWorkerRegister() {
           }
 
           // Listen for connection changes
-          connection.addEventListener("change", () => {
+          connection?.addEventListener("change", () => {
             if (
-              connection.effectiveType === "2g" ||
-              connection.effectiveType === "slow-2g"
+              connection?.effectiveType === "2g" ||
+              connection?.effectiveType === "slow-2g"
             ) {
               document.documentElement.classList.add("slow-connection");
             } else {

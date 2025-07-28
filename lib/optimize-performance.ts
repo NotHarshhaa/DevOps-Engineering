@@ -2,6 +2,24 @@
  * Performance optimization utilities for Next.js applications
  */
 
+// Add types for performance entries
+interface LayoutShiftEntry extends PerformanceEntry {
+  hadRecentInput: boolean;
+  value: number;
+}
+
+interface FirstInputEntry extends PerformanceEntry {
+  processingStart: number;
+}
+
+interface NavigatorWithMemory extends Navigator {
+  deviceMemory: number;
+}
+
+interface NavigatorWithConcurrency extends Navigator {
+  hardwareConcurrency: number;
+}
+
 /**
  * Defers non-critical resources by dynamically loading scripts after the main page load
  * @param {string} src - URL of the script to load
@@ -96,13 +114,13 @@ export function optimizeImageLoading(imgElement: HTMLImageElement | null, priori
  * @param {number} delay - Delay in milliseconds
  * @returns Debounced function
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout>;
 
-  return function(this: any, ...args: Parameters<T>): void {
+  return function(this: ThisParameterType<T>, ...args: Parameters<T>): void {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => fn.apply(this, args), delay);
   };
@@ -114,13 +132,13 @@ export function debounce<T extends (...args: any[]) => any>(
  * @param {number} limit - Time limit in milliseconds
  * @returns Throttled function
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: Parameters<T>) => ReturnType<T>>(
   fn: T,
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean = false;
 
-  return function(this: any, ...args: Parameters<T>): void {
+  return function(this: ThisParameterType<T>, ...args: Parameters<T>): void {
     if (!inThrottle) {
       fn.apply(this, args);
       inThrottle = true;
@@ -135,7 +153,7 @@ export function throttle<T extends (...args: any[]) => any>(
  */
 export function monitorWebVitals() {
   if (typeof window === 'undefined' || !('PerformanceObserver' in window)) {
-    return { getLCP: () => null, getFID: () => null, getCLS: () => null };
+    return { getCLS: () => null, getFID: () => null, getLCP: () => null };
   }
 
   let lcp: number | null = null;
@@ -158,8 +176,9 @@ export function monitorWebVitals() {
     new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
       entries.forEach((entry) => {
+        const firstInputEntry = entry as unknown as FirstInputEntry;
         if (!fid || entry.startTime < fid) {
-          fid = (entry as any).processingStart - entry.startTime;
+          fid = firstInputEntry.processingStart - entry.startTime;
         }
       });
     }).observe({ type: 'first-input', buffered: true });
@@ -172,9 +191,10 @@ export function monitorWebVitals() {
     let cumulativeLayoutShift = 0;
     new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
-      entries.forEach((entry: any) => {
-        if (!entry.hadRecentInput) {
-          cumulativeLayoutShift += entry.value;
+      entries.forEach((entry) => {
+        const layoutShiftEntry = entry as unknown as LayoutShiftEntry;
+        if (!layoutShiftEntry.hadRecentInput) {
+          cumulativeLayoutShift += layoutShiftEntry.value;
           cls = cumulativeLayoutShift;
         }
       });
@@ -184,9 +204,9 @@ export function monitorWebVitals() {
   }
 
   return {
-    getLCP: () => lcp,
+    getCLS: () => cls,
     getFID: () => fid,
-    getCLS: () => cls
+    getLCP: () => lcp
   };
 }
 
@@ -208,10 +228,12 @@ export function isMobileDevice(): boolean {
 export function optimizeForLowEndDevices(element: HTMLElement | null): void {
   if (!element || typeof window === 'undefined') return;
 
-  const isLowEnd =
-    isMobileDevice() ||
-    (navigator as any).deviceMemory < 4 ||
-    (navigator as any).hardwareConcurrency < 4;
+  const hasLowMemory = 'deviceMemory' in navigator && 
+    (navigator as NavigatorWithMemory).deviceMemory < 4;
+  const hasLowCores = 'hardwareConcurrency' in navigator && 
+    (navigator as NavigatorWithConcurrency).hardwareConcurrency < 4;
+
+  const isLowEnd = isMobileDevice() || hasLowMemory || hasLowCores;
 
   if (isLowEnd) {
     element.classList.add('reduced-motion');
