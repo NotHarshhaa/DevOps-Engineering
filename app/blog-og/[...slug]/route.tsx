@@ -1,17 +1,44 @@
-// import { generateOGImage } from "fumadocs-ui/og";
 import { generateOGImage } from "@/lib/generateOGImage";
-import { metadataImage, metadataImageBlog } from "@/lib/metadata";
+import { blog } from "@/lib/source";
+import { Page } from "fumadocs-core/source";
 
-export const GET = metadataImageBlog.createAPI(async (page) => {
+// Use force-static to ensure all paths are generated at build time
+export const dynamic = 'force-static';
+
+export async function GET(
+  request: Request,
+  { params }: { params: { slug: string[] } }
+): Promise<Response> {
+  const slug = params.slug;
+
+  if (!Array.isArray(slug) || slug.length === 0) {
+    return new Response('Not Found - Invalid Slug', { status: 404 });
+  }
+
+  const page = blog.getPage(slug);
+
+  if (!page) {
+    return new Response('Not Found - Page Not Found', { status: 404 });
+  }
+
   return generateOGImage({
-    // description: page.data.description,
-    site: "stackzero/commerce-ui",
-    title: page.data.title,
     primaryColor: "#8940ff34",
     primaryTextColor: "rgb(240, 228, 247)",
-  });
-});
+    site: "stackzero/commerce-ui",
+    title: page.data.title,
+  }) as unknown as Response;
+}
 
+// Generate static paths for all blog pages
 export function generateStaticParams() {
-  return metadataImageBlog.generateParams();
+  const pages = blog.getPages();
+  // Make sure we return an empty array if there are no pages
+  // This prevents the export path mismatch issue
+  if (!pages || pages.length === 0) {
+    return [{ slug: ['index'] }];
+  }
+
+  return pages.map((page: Page) => ({
+    slug: page.slugs && page.slugs.length > 0 ? page.slugs : ['index'],
+  }));
 }

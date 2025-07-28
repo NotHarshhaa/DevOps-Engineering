@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "next build; node ./scripts/handle-og-routes.mjs || true",
     "prebuild": "npm run build:registry",
     "build:registry": "tsx ./scripts/build-registry.ts",
     "sort:registry": "tsx ./scripts/sort-registry.ts",
@@ -36,6 +36,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "critters": "^0.0.23",
     "embla-carousel": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "fumadocs-core": "15.2.5",

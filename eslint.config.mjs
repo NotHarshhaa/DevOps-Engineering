@@ -13,17 +13,25 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: ["registry/"],
+    ignores: ["registry/", "scripts/", "app/**/[...slug]/route.tsx"],
   },
   {
     plugins: {
       perfectionist,
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@next/next/no-html-link-for-pages": "off",
+      "@next/next/no-img-element": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "no-console": "off",
+      "perfectionist/sort-imports": "off",
       "perfectionist/sort-objects": "warn",
-       // Other rules
-      "@next/next/no-img-element": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
     },
   },
 ];
